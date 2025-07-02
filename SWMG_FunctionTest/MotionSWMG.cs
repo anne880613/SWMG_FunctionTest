@@ -201,7 +201,7 @@ namespace SWMG_FunctionTest
             Motion.JogCommand jogCommand = new();
 
             jogCommand.Profile.Type = SSCApiCLR.ProfileType.Trapezoidal;
-            jogCommand.Axis = 0;
+            jogCommand.Axis = this.AxisIndex;
 
             if(direction)
                 jogCommand.Profile.Velocity = speed;
@@ -217,7 +217,7 @@ namespace SWMG_FunctionTest
         public override bool IsStopped()
         {
             //判斷是否為Idle
-            int result =_device_cm.GetStatus(ref _CmStatus);
+            int result =_device_cm.GetStatus(ref _CmStatus);//其實好像沒有必要
             if (result != (uint)ErrorCode.None)
                 throw new Exception("Get current position Failed With Error Code: [" + result + "]");
 
@@ -226,6 +226,7 @@ namespace SWMG_FunctionTest
             waitCondition.AxisCount = 1;
             waitCondition.Axis[0] = this.AxisIndex;
             waitCondition.WaitConditionType = Motion.WaitConditionType.AxisIdle;
+
             _device_cm.Motion.Wait(waitCondition);
             return true;
 

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace SWMG_FunctionTest
@@ -22,6 +24,9 @@ namespace SWMG_FunctionTest
         //di port0 : 4 channels
         //do port0 : 8 channels
         private static Io _device_Io;
+        private System.Timers.Timer _IoTimer;
+
+
         public IOSWMG()
         {
             try
@@ -48,17 +53,36 @@ namespace SWMG_FunctionTest
                         int result = _device_Io.GetOutByte(port, ref _UserSetDOPortStatus[port]);
                     }
 
-                    Thread thread = new(RefreshIO)
-                    {
-                        Priority = ThreadPriority.Highest,
-                        Name = "IO"
-                    };
-
+                    //Thread thread = new(RefreshIO)
+                    //{
+                    //    Priority = ThreadPriority.Highest,
+                    //    Name = "IO"
+                    //};
+                    // 啟動 Timer 取代 Thread
+                    _IoTimer = new System.Timers.Timer(100); // 100ms 更新一次，可自行調整
+                    _IoTimer.Elapsed += IoTimer_Elapsed;
+                    _IoTimer.AutoReset = true;
+                    _IoTimer.Start();
                 }
             }
             catch 
             { 
                 IsValid = false; 
+            }
+        }
+
+        private void IoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (!_Run) return;
+
+            try
+            {
+                RefreshIO(); // 呼叫你原本的更新邏輯
+            }
+            catch (Exception ex)
+            {
+                // 可加上例外處理，避免 Timer 崩潰
+                Console.WriteLine("IO Refresh Error: " + ex.Message);
             }
         }
 
@@ -96,7 +120,7 @@ namespace SWMG_FunctionTest
             return _device_Io;
         }
 
-        private void RefreshIO()
+        public void RefreshIO()
         {
             while (_Run && IsValid)
             {
@@ -125,7 +149,7 @@ namespace SWMG_FunctionTest
                 }
                 //AO 先PASS
 
-                Thread.Sleep(1);
+                //Thread.Sleep(1);
             }
         }
 
@@ -133,6 +157,8 @@ namespace SWMG_FunctionTest
         {
             _Run = false;
             _device_Io.Dispose();
+            _IoTimer?.Stop();
+            _IoTimer?.Dispose();
         }
 
         public override bool GetDI(int port, int number)

@@ -292,7 +292,7 @@ namespace SWMG_FunctionTest
         public static bool IsStopped(Axis axis, bool defalutValue, out string error)
         {
             error = string.Empty;
-            if (!_Axes[(int)axis].IsValid)//是否有抱錯
+            if (!_Axes[(int)axis].IsValid)//是否有報錯
                 return defalutValue;
             bool result = _Axes[(int)axis].IsStopped();
             error = "Axis : " + axis.ToString() + (result ? " stopped" : " not stopped.");

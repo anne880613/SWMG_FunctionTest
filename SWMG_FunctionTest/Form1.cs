@@ -11,7 +11,6 @@ namespace SWMG_FunctionTest
         public Form1()
         {
             InitializeComponent();
-            label1.Text = "";
 
             IOManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "IO.ini")));
             MotionManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "Motor.ini")));
@@ -42,7 +41,7 @@ namespace SWMG_FunctionTest
         {
             if (SWMG.IsOpened)
             {
-                for(int i= 0; i < Enum.GetNames(typeof(Axis)).Length; i++)
+                for (int i = 0; i < Enum.GetNames(typeof(Axis)).Length; i++)
                     MotionManager.ServoOn((Axis)i);
             }
         }
@@ -61,13 +60,13 @@ namespace SWMG_FunctionTest
             //jogCommand.Profile.Dec = 1000;
 
             //SWMG.GetCoreMotion().Motion.StartJog(jogCommand);
-            MotionManager.StartJog(0, false, 100);
+            MotionManager.StartJog(Axis.SampleX, false, 100);
         }
 
         private void buttonJOGNegative_MouseUp(object sender, MouseEventArgs e)
         {
             //SWMG.GetCoreMotion().Motion.ExecQuickStop(0);
-            MotionManager.Stop(0);
+            MotionManager.Stop(Axis.SampleX);
         }
 
         private void buttonJOGPositive_MouseDown(object sender, MouseEventArgs e)
@@ -84,13 +83,13 @@ namespace SWMG_FunctionTest
             //jogCommand.Profile.Dec = 1000;
 
             //SWMG.GetCoreMotion().Motion.StartJog(jogCommand);
-            MotionManager.StartJog(0, true, 100);
+            MotionManager.StartJog(Axis.SampleX, true, 100);
         }
 
         private void buttonJOGPositive_MouseUp(object sender, MouseEventArgs e)
         {
             //SWMG.GetCoreMotion().Motion.ExecQuickStop(0);
-            MotionManager.Stop(0);
+            MotionManager.Stop(Axis.SampleX);
         }
 
         private void buttonStopServo_Click(object sender, EventArgs e)
@@ -120,7 +119,7 @@ namespace SWMG_FunctionTest
             //posCommand.Profile.Dec = 1000;
 
             //SWMG.GetCoreMotion().Motion.StartPos(posCommand);
-            MotionManager.AbsMove(Axis.SampleZ, (double)numericUpDownTargetPos.Value, 100);
+            MotionManager.AbsMove(Axis.SampleX, (double)numericUpDownTargetPos.Value, 100);
         }
 
         private void checkBoxDo1_CheckedChanged(object sender, EventArgs e)
@@ -128,16 +127,10 @@ namespace SWMG_FunctionTest
             if (checkBoxDo1.Checked)
             {
                 IOManager.SetDO(IOManager.DO.testDO1, true);
-                if (!IOManager.GetDO(IOManager.DO.testDO1))
-                    label1.Text = "Set true Fial";
-                else label1.Text = "Success";
             }
             else
             {
                 IOManager.SetDO(IOManager.DO.testDO1, false);
-                if (IOManager.GetDO(IOManager.DO.testDO1))
-                    label1.Text = "Set false fail";
-                else label1.Text = "Success";
             }
 
         }
@@ -169,6 +162,70 @@ namespace SWMG_FunctionTest
         private void buttonChangeDeviceName_Click(object sender, EventArgs e)
         {
             SWMG.SetDeviceName(textBoxDeviceName.Text);
+        }
+
+        private void checkBoxDO_2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxDO_2.Checked)
+            {
+                IOManager.SetDO(IOManager.DO.testDO2, true);
+
+            }
+            else
+            {
+                IOManager.SetDO(IOManager.DO.testDO2, false);
+
+            }
+        }
+
+        private void buttonYJogNegative_MouseDown(object sender, MouseEventArgs e)
+        {
+            MotionManager.StartJog(Axis.SampleY, false, 100);
+        }
+
+        private void buttonYJogNegative_MouseUp(object sender, MouseEventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleY);
+        }
+
+        private void buttonYAbsMove_Click(object sender, EventArgs e)
+        {
+            MotionManager.AbsMove(Axis.SampleY, (double)numericUpDownYAbsTarget.Value, 100);
+        }
+
+        private void buttonYJogPositive_MouseDown(object sender, MouseEventArgs e)
+        {
+            MotionManager.StartJog(Axis.SampleY, true, 100);
+        }
+
+        private void buttonYJogPositive_MouseUp(object sender, MouseEventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleY);
+        }
+
+        private void buttonZJogNegative_MouseDown(object sender, MouseEventArgs e)
+        {
+            MotionManager.StartJog(Axis.SampleZ, false, 100);
+        }
+
+        private void buttonZJogNegative_MouseUp(object sender, MouseEventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleZ);
+        }
+
+        private void buttonZAbsMove_Click(object sender, EventArgs e)
+        {
+            MotionManager.AbsMove(Axis.SampleZ, (double)numericUpDownZAbsTarget.Value, 100);
+        }
+
+        private void buttonZJogPositive_MouseDown(object sender, MouseEventArgs e)
+        {
+            MotionManager.StartJog(Axis.SampleZ, true, 100);
+        }
+
+        private void buttonZJogPositive_MouseUp(object sender, MouseEventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleZ);
         }
     }
 }
