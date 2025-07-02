@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AdvancedMotionApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\AdvancedMotionApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CCLinkApi_CLRLib">
+      <HintPath>C:\Program Files\MotionSoftware\SWM-G\Lib\CCLinkApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CompensationApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\CompensationApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="ComputerId_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\ComputerId_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreMotionApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\CoreMotionApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EcApi_CLRLib">
+      <HintPath>C:\Program Files\MotionSoftware\SWM-G\Lib\EcApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EventApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\EventApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="IOApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\IOApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="LogApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\LogApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NicFilter_CLRLib">
+      <HintPath>C:\Program Files\MotionSoftware\SWM-G\Lib\NicFilter_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="PMMotionApi_CLRLib">
+      <HintPath>C:\Program Files\MotionSoftware\SWM-G\Lib\PMMotionApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="SimuApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\SimuApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="SSCApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\SSCApi_CLRLib.dll</HintPath>
+    </Reference>
+    <Reference Include="UserMemoryApi_CLRLib">
+      <HintPath>bin\x64\Debug\net8.0-windows\UserMemoryApi_CLRLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(SWM-G)\Lib\IMDll.dll&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
+</Project>
