@@ -32,7 +32,6 @@ namespace SWMG_FunctionTest
         private static readonly Speed[] _Speeds = new Speed[Enum.GetNames(typeof(Axis)).Length];
         public static bool IsValid { private set; get; }
         public static int MachineSpeedPercentage {  get; private set; }
-        private static List<nint> _AdvantechGroup = [];
 
         public static void Initial(IniFile ini)
         {
@@ -176,8 +175,6 @@ namespace SWMG_FunctionTest
         }
         public static void Stop(Axis axis)
         {
-            if (!_Axes[(int)axis].IsValid)
-                return;
             _Axes[(int)axis].Stop();
         }
         public static void StopAll ()

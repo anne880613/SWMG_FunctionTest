@@ -28,6 +28,12 @@ namespace SWMG_FunctionTest
             InitialErrorMessage = string.Empty;
             try
             {
+                if (_device != null)
+                {
+                    _device.CloseDevice();
+                    _device.Dispose();
+                    _device = null;
+                }
                 _device = new SSCApi();
                 // 建立裝置（可根據實際安裝位置調整路徑）
                 errNum = _device.CreateDevice("C:\\Program Files\\MotionSoftware\\SWM-G\\",
@@ -123,7 +129,10 @@ namespace SWMG_FunctionTest
                 }
 
                 _device.Dispose();
+                IOManager.Close();
+                MotionManager.Close();
                 IsOpened = false;
+                _device = null;
             }
             catch (Exception ex)
             {

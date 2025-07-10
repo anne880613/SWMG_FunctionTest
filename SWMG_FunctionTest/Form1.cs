@@ -7,20 +7,19 @@ namespace SWMG_FunctionTest
     public partial class Form1 : Form
     {
         byte currentDoValue1 = 0;
-        byte currentDIValue = 0;
         public Form1()
         {
             InitializeComponent();
 
-            IOManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "IO.ini")));
-            MotionManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "Motor.ini")));
-            MotionManager.SetMachineSpeedPercentage(100);
         }
 
         private void buttonOpenDevice_Click(object sender, EventArgs e)
         {
             if (!SWMG.IsOpened)
                 SWMG.OpenDevice();
+            IOManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "IO.ini")));
+            MotionManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "Motor.ini")));
+            MotionManager.SetMachineSpeedPercentage(100);
 
             //檢查目前IO狀態
             IOSWMG.GetIo().GetOutBit(0x00, 0x00, ref currentDoValue1);
@@ -32,9 +31,12 @@ namespace SWMG_FunctionTest
         private void buttonCloseDevice_Click(object sender, EventArgs e)
         {
             if (SWMG.IsOpened)
+            {
+                
+                MotionManager.Close();
+                IOManager.Close();
                 SWMG.CloseDevice();
-
-            checkBoxDo1.Checked = false;
+            }
         }
 
         private void buttonStartServo_Click(object sender, EventArgs e)
@@ -96,12 +98,11 @@ namespace SWMG_FunctionTest
         {
             if (SWMG.IsOpened)
             {
-                //int err = SWMG.GetCoreMotion().AxisControl.SetServoOn(0, 0);
-                //if (err != ErrorCode.None)
-                //{
-                //    MessageBox.Show("關閉Servo失敗，錯誤碼：" + err);
-                //}
-                MotionManager.ServoOff(0);
+                if (SWMG.IsOpened)
+                {
+                    for (int i = 0; i < Enum.GetNames(typeof(Axis)).Length; i++)
+                        MotionManager.ServoOff((Axis)i);
+                }
             }
         }
 

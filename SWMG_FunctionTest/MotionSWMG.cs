@@ -54,72 +54,42 @@ namespace SWMG_FunctionTest
         }
         public override void EmergencyStop()
         {
-            _device_cm.Motion.ExecQuickStop(0);
+            _device_cm.Motion.ExecQuickStop(this.AxisIndex);
         }
 
 
         public override void Stop()
         {
-            //要怎麼只指定停止一軸 //如果每一軸獨立創一個CoreMotion他們就會是個別的第0軸??
-            _device_cm.Motion.Stop(0);
+            _device_cm.Motion.Stop(this.AxisIndex);
         }
 
         public override void SetToZero()
         {
             uint result = 0;
             if (result != (uint)ErrorCode.None)
-                throw new Exception("Set command position failed wih error code: [0x" + Convert.ToString(result, 16) + "]");
+                throw new Exception("Set command position failed wih error code: [" + result+ "]");
             result = 0;
             if (result != (uint)ErrorCode.None)
-                throw new Exception("Set actual position failed wih error code: [0x" + Convert.ToString(result, 16) + "]");
+                throw new Exception("Set actual position failed wih error code: [" + result + "]");
         }
 
         public override bool IsHomeAttained()
         {
-            uint statusWord = 0;
-            uint result;
-            result = 0;
-            if (result != (uint)ErrorCode.None)
-                throw new Exception("Get PAR_AxStatusWord Failed With Error Code: [0x" + Convert.ToString(result, 16) + "]");
-            if ((statusWord & (0x01 << 12)) > 0 && (statusWord & (0x01 << 10)) > 0)
+            int err = _device_cm.Home.SetHomeDone(this.AxisIndex, 1);
+            if (err != ErrorCode.None)
                 return true;
             else
                 return false;
         }
         public override void Home(double speed, double acc, double dec)
         {
-            uint result;
-            result = 0;
-            //if (IsReverse)
-            //    offsetDistance *= -1;
-
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.PAR_AxHomeVelLow, HomeCreepingSpeed);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.PAR_AxHomeVelHigh, speed);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.PAR_AxHomeAcc, acc);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.PAR_AxHomeDec, dec);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.PAR_AxHomeCrossDistance, 1);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.CFG_AxHomeOffsetDistance, HomeOffsetDistance);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_SetF64Property(AxisHandle, (uint)PropertyID.CFG_AxHomeOffsetVel, speed);
-            //if (result != (uint)ErrorCode.None)
-            //    goto Error;
-            //result = Advantech.Motion.Motion.mAcm_AxMoveHome(AxisHandle, (uint)HomeMode, HomeDirection ? (uint)0 : 1);
-            //if (result != (uint)ErrorCode.None)
-                goto Error;
-            Error:
-            if (result != (uint)ErrorCode.None)
-                throw new Exception("Set Home Speed Failed With Error Code: [0x" + Convert.ToString(result, 16) + "]");
+            //參數要放在哪
+            Config.HomeParam homeParam = new Config.HomeParam();
+            _device_cm.Config.GetHomeParam(this.AxisIndex, ref homeParam);
+            homeParam.HomeType = Config.HomeType.CurrentPos;
+            _device_cm.Config.SetHomeParam(this.AxisIndex, homeParam);
+            _device_cm.Home.StartHome(this.AxisIndex);
+            _device_cm.Motion.Wait(this.AxisIndex);
         }
 
         public override void AbsMove(double position, double speed, double acc, double dec)
@@ -270,11 +240,20 @@ namespace SWMG_FunctionTest
         }
         public override void ServoOn()
         {
-            _device_cm.AxisControl.SetServoOn(this.AxisIndex, 1);//要怎麼區分開哪個軸
+            _device_cm.AxisControl.SetServoOn(this.AxisIndex, 1);
+            while (true)
+            {
+                _device_cm.GetStatus(ref _CmStatus);
+                if (_CmStatus.AxesStatus[0].ServoOn)
+                {
+                    break;
+                }//確定有成功開啟軸
+                System.Threading.Thread.Sleep(100);
+            }
         }
         public override void ServoOff()
         {
-            _device_cm.AxisControl.SetServoOn(0, 0);
+            _device_cm.AxisControl.SetServoOn(this.AxisIndex, 0);
         }
         public override void ErrorReset()
         {

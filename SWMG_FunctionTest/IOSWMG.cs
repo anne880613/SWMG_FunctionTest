@@ -50,6 +50,7 @@ namespace SWMG_FunctionTest
                     for (int port = 0; port < _DOPortStatus.Length; port++)
                     {
                         //讀取Output目前狀態，保持點位
+                        if (_device_Io == null) return;
                         int result = _device_Io.GetOutByte(port, ref _UserSetDOPortStatus[port]);
                     }
 
@@ -73,15 +74,17 @@ namespace SWMG_FunctionTest
 
         private void IoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (!_Run) return;
+            if (!_Run || _device_Io == null) return;
 
             try
             {
-                RefreshIO(); // 呼叫你原本的更新邏輯
+                lock (this) // 加入 lock，避免多執行緒同時進入
+                {
+                    RefreshIO();
+                }
             }
             catch (Exception ex)
             {
-                // 可加上例外處理，避免 Timer 崩潰
                 Console.WriteLine("IO Refresh Error: " + ex.Message);
             }
         }
@@ -95,6 +98,7 @@ namespace SWMG_FunctionTest
             int AnalogOUT = 0;
 
             //初始化
+            if (_device_Io == null) return;
             result = _device_Io.GetInBytes(0, Constants.MaxIoInSize, ref inData);//每一byte存一格
             if(result != ErrorCode.None)
                 InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
@@ -122,8 +126,12 @@ namespace SWMG_FunctionTest
 
         public void RefreshIO()
         {
+            if (!SWMG.IsOpened || _device_Io == null)
+                return;
+
             while (_Run && IsValid)
             {
+                if (_device_Io == null) return;
                 int result;
                 //refrsh Input
                 result = _device_Io.GetInBytes(0, Constants.MaxIoInSize, ref _DIPortStatus);//每一byte存一格
@@ -132,12 +140,7 @@ namespace SWMG_FunctionTest
                 result = _device_Io.GetOutBytes(0, Constants.MaxIoOutSize, ref _DOPortStatus);
                 if (result != ErrorCode.None)
                     InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
-                //result = _device_Io.GetInAnalogDataInt(0x00, ref _AIPortStatus);
-                //if (result != ErrorCode.None)
-                //    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
-                //result = _device_Io.GetOutAnalogDataInt(0x00, ref _AOPortStatus);
-                //if (result != ErrorCode.None)
-                //    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
+                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
 
                 //refresh Output
                 for (int port = 0; port < _DOPortStatus.Length; port++)
@@ -149,16 +152,17 @@ namespace SWMG_FunctionTest
                 }
                 //AO 先PASS
 
-                //Thread.Sleep(1);
             }
         }
 
         public override void Close()
         {
             _Run = false;
-            _device_Io.Dispose();
             _IoTimer?.Stop();
             _IoTimer?.Dispose();
+            _IoTimer = null;
+            _device_Io?.Dispose();
+            _device_Io = null; // Dispose 後設為 null
         }
 
         public override bool GetDI(int port, int number)
