@@ -1,6 +1,8 @@
-﻿using SSCApiCLR;
+﻿using sscApi;
+using SSCApiCLR;
 using SSCApiCLR.EcApiCLR;
 using System;
+using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Text;
 
@@ -9,6 +11,7 @@ namespace SWMG_FunctionTest
     public static class SWMG
     {
         private static SSCApi _device;//一個device可以有128軸
+        private static EngineStatus _egStatus;
         static private IntPtr _DeviceHandle = IntPtr.Zero;
 
 
@@ -20,6 +23,7 @@ namespace SWMG_FunctionTest
 
         private static CoreMotion _device_cm;
         private static CoreMotionStatus _CmStatus;
+        //private static CoreMotionAxisStatus _cmAxis;
 
 
         public static void OpenDevice()
@@ -35,6 +39,7 @@ namespace SWMG_FunctionTest
                     _device = null;
                 }
                 _device = new SSCApi();
+                //_egStatus = new EngineStatus();//引擎狀態
                 // 建立裝置（可根據實際安裝位置調整路徑）
                 errNum = _device.CreateDevice("C:\\Program Files\\MotionSoftware\\SWM-G\\",
                     DeviceType.DeviceTypeNormal,
@@ -46,13 +51,13 @@ namespace SWMG_FunctionTest
                     MessageBox.Show(InitialErrorMessage);
                     return;
                 }
+                Thread.Sleep(5000); // 等待裝置初始化完成
 
-                
                 _deviceName = "Testdevice";
                 _device.SetDeviceName(_deviceName);
 
                 // Communicate the device
-                errNum = _device.StartCommunication(5000);
+                errNum = _device.StartCommunication(0xFFFFFFFF);
                 if (errNum != ErrorCode.None)
                 {
                     string strTemp = "Create Device Numbers Failed With Error Code[" + errNum + "]";
@@ -72,6 +77,12 @@ namespace SWMG_FunctionTest
                 //初始化控制物件
                 _device_cm = new CoreMotion(SWMG.GetDevice());
                 _CmStatus = new CoreMotionStatus();
+
+                //_device_cm = SWMG.GetCoreMotion();
+                //_CmStatus = SWMG.GetCoreMotionStatus();
+                _device_cm.GetStatus(ref _CmStatus);
+                
+
 
                 IsOpened = true;
             }
@@ -103,6 +114,16 @@ namespace SWMG_FunctionTest
         public static CoreMotionStatus GetCoreMotionStatus()
         {
             return _CmStatus;
+        }
+
+        public static CoreMotionAxisStatus GetCoreMotionAxisStatus(int index)
+        {
+            if(index < 0 || index >= _CmStatus.AxesStatus.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+            }
+            
+            return _CmStatus.AxesStatus[index];
         }
 
 

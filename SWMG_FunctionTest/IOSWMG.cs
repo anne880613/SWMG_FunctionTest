@@ -101,16 +101,16 @@ namespace SWMG_FunctionTest
             if (_device_Io == null) return;
             result = _device_Io.GetInBytes(0, Constants.MaxIoInSize, ref inData);//每一byte存一格
             if(result != ErrorCode.None)
-                InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
+                InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + SSCApi.ErrorToString(result);
             result = _device_Io.GetOutBytes(0, Constants.MaxIoOutSize, ref outData);
             if(result != ErrorCode.None)
-                InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
-            result = _device_Io.GetInAnalogDataInt(0x00, ref AnalogIN);
-            if (result != ErrorCode.None)
-                InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
-            result = _device_Io.GetOutAnalogDataInt(0x00, ref AnalogOUT);
-            if (result != ErrorCode.None)
-                InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
+                InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + SSCApi.ErrorToString(result);
+            //result = _device_Io.GetInAnalogDataInt(0x00, ref AnalogIN);
+            //if (result != ErrorCode.None)
+            //    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
+            //result = _device_Io.GetOutAnalogDataInt(0x00, ref AnalogOUT);
+            //if (result != ErrorCode.None)
+            //    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
 
             _DIPortStatus = new byte[8000];
             _DOPortStatus = new byte[8000];
@@ -136,11 +136,11 @@ namespace SWMG_FunctionTest
                 //refrsh Input
                 result = _device_Io.GetInBytes(0, Constants.MaxIoInSize, ref _DIPortStatus);//每一byte存一格
                 if (result != ErrorCode.None)
-                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
+                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + SSCApi.ErrorToString(result);
                 result = _device_Io.GetOutBytes(0, Constants.MaxIoOutSize, ref _DOPortStatus);
                 if (result != ErrorCode.None)
-                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
-                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + result.ToString();
+                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + SSCApi.ErrorToString(result);
+                    InitialErrorMessage = "Get Property Failed With Error Code: [" + result + "]" + "\r\nError Message:" + SSCApi.ErrorToString(result);
 
                 //refresh Output
                 for (int port = 0; port < _DOPortStatus.Length; port++)

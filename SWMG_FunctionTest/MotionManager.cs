@@ -2,6 +2,7 @@
 using SSCApiCLR;
 using System.ComponentModel;
 using static SWMG_FunctionTest.MotionManager;
+using static SWMG_FunctionTest.MotionSWMG;
 
 namespace SWMG_FunctionTest
 {
@@ -118,13 +119,13 @@ namespace SWMG_FunctionTest
                 double backlash = _MotionIni.ReadValue(axisName, "Backlash", typeof(double), 0);
                 SetBacklash((Axis)i, backlash);
 
-                string homeMode = _MotionIni.ReadValue(axisName, "HomeMode", typeof(string), HomeState.ZPulseSearch);
-                if (!Enum.GetNames(typeof(HomeState)).Contains(homeMode.ToString()))
+                string homeMode = _MotionIni.ReadValue(axisName, "HomeMode", typeof(string), Config.HomeType.HS);
+                if (!Enum.GetNames(typeof(Config.HomeType)).Contains(homeMode.ToString()))
                     homeMode = HomeState.ZPulseSearch.ToString();
                 double creepingSpeed = _MotionIni.ReadValue(axisName, "CreepingSpeed", typeof(double), 0.1);
                 double offsetDistance = _MotionIni.ReadValue(axisName, "OffsetDistance", typeof(double), 0);
                 bool homeDirection = _MotionIni.ReadValue(axisName, "HomeDirection", typeof(bool), true);
-                SetHomeMode((Axis)i, (HomeState)Enum.Parse(typeof(HomeState), homeMode), creepingSpeed, offsetDistance, homeDirection);
+                SetHomeMode((Axis)i, (Config.HomeType)Enum.Parse(typeof(Config.HomeType), homeMode), creepingSpeed, offsetDistance, homeDirection);
 
                 Speed speed = new()
                 {
@@ -415,19 +416,19 @@ namespace SWMG_FunctionTest
             _Axes[(int)axis].ServoOff();
         }
         public static void SetPPU(Axis axis, uint ppu)
-        {
+        {//1000 PPU 表示移動 1 mm 需要輸入 1000 個脈波。
             if (!_Axes[(int)axis].IsValid)
                 return;
             _Axes[(int)axis].SetPPU(ppu);
         }
 
-        public static bool GetSignal(Axis axis, CoreMotionAxisStatus ax_Motion_IO, bool defaultValue, out string error)
+        public static bool GetSignal(Axis axis, AxisStatus CmStatus, bool defaultValue, out string error)
         {
-            error = "Axis : " + axis.ToString() + " , " + ax_Motion_IO.ToString() + " : " + (defaultValue ? "ON" : "OFF");
+            error = "Axis : " + axis.ToString() + " , " + CmStatus.ToString() + " : " + (defaultValue ? "ON" : "OFF");
             if (!_Axes[(int)axis].IsValid)
                 return defaultValue;
-            bool result = _Axes[(int)axis].GetSignal(ax_Motion_IO);
-            error = "Axis : " + axis.ToString() + " , " + ax_Motion_IO.ToString() + " : " + (result ? "ON" : "OFF");
+            bool result = _Axes[(int)axis].GetSignal(CmStatus);
+            error = "Axis : " + axis.ToString() + " , " + CmStatus.ToString() + " : " + (result ? "ON" : "OFF");
             return result;
         }
         public static uint GetPPU(Axis axis)
@@ -450,11 +451,11 @@ namespace SWMG_FunctionTest
             return _Axes[(int)axis].GetPPUDenominator();
         }
 
-        public static void SetHomeMode(Axis axis, HomeState mode, double creepingSpeed, double offsetDistance, bool direction)
+        public static void SetHomeMode(Axis axis, Config.HomeType mode, double creepingSpeed, double offsetDistance, bool direction)
         {
             _Axes[(int)axis].SetHomeMode(mode, creepingSpeed, offsetDistance, direction);
         }
-        public static HomeState GetHomeMode(Axis axis)
+        public static Config.HomeType GetHomeMode(Axis axis)
         {
             return _Axes[(int)axis].HomeMode;
         }

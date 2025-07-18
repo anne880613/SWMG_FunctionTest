@@ -1,5 +1,6 @@
 using SSCApiCLR;
 using static SWMG_FunctionTest.MotionManager;
+using static SWMG_FunctionTest.MotionSWMG;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SWMG_FunctionTest
@@ -32,7 +33,7 @@ namespace SWMG_FunctionTest
         {
             if (SWMG.IsOpened)
             {
-                
+
                 MotionManager.Close();
                 IOManager.Close();
                 SWMG.CloseDevice();
@@ -70,7 +71,7 @@ namespace SWMG_FunctionTest
             //SWMG.GetCoreMotion().Motion.ExecQuickStop(0);
             MotionManager.Stop(Axis.SampleX);
         }
-
+        private CancellationTokenSource jogCancelTokenSource;
         private void buttonJOGPositive_MouseDown(object sender, MouseEventArgs e)
         {
             //-----------------------------------------------------------------
@@ -85,12 +86,12 @@ namespace SWMG_FunctionTest
             //jogCommand.Profile.Dec = 1000;
 
             //SWMG.GetCoreMotion().Motion.StartJog(jogCommand);
+
             MotionManager.StartJog(Axis.SampleX, true, 100);
         }
 
         private void buttonJOGPositive_MouseUp(object sender, MouseEventArgs e)
         {
-            //SWMG.GetCoreMotion().Motion.ExecQuickStop(0);
             MotionManager.Stop(Axis.SampleX);
         }
 
@@ -227,6 +228,63 @@ namespace SWMG_FunctionTest
         private void buttonZJogPositive_MouseUp(object sender, MouseEventArgs e)
         {
             MotionManager.Stop(Axis.SampleZ);
+        }
+
+        private void buttonXRelMove_Click(object sender, EventArgs e)
+        {
+            MotionManager.RelMove(Axis.SampleX, (double)numericUpDownRelMove.Value, 100);
+        }
+
+        private void buttonYRelMove_Click(object sender, EventArgs e)
+        {
+            MotionManager.RelMove(Axis.SampleY, (double)numericUpDownYRelMove.Value, 100);
+        }
+
+        private void buttonZRelMove_Click(object sender, EventArgs e)
+        {
+            MotionManager.RelMove(Axis.SampleZ, (double)numericUpDownZRelMove.Value, 100);
+        }
+
+        private void buttonXStop_Click(object sender, EventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleX);
+        }
+
+        private void buttonXPosition_Click(object sender, EventArgs e)
+        {
+            labelXPosition.Text = MotionManager.GetPosition(Axis.SampleX).ToString();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CoreMotionStatus CmStatus = new CoreMotionStatus();
+            SWMG.GetCoreMotion().GetStatus(ref CmStatus);
+            CoreMotionAxisStatus cmAxis = CmStatus.AxesStatus[(int)Axis.SampleX];
+            AxisStatus choose = AxisStatus.InPos;
+            bool result = MotionManager.GetSignal(Axis.SampleX, choose, false, out string errMsg);
+            label1.Text = result.ToString();
+        }
+
+        private void buttonHoming_Click(object sender, EventArgs e)
+        {
+            MotionManager.Home(Axis.SampleX, 100);
+
+            labelXHoming.Text = (MotionManager.IsHomeAttained(Axis.SampleX, false, out string errMsg)).ToString();
+        }
+
+        private void buttonYStop_Click(object sender, EventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleY);
+        }
+
+        private void buttonZStop_Click(object sender, EventArgs e)
+        {
+            MotionManager.Stop(Axis.SampleZ);
+        }
+
+        private void buttonSetXZero_Click(object sender, EventArgs e)
+        {
+            MotionManager.SetToZero(Axis.SampleX);
         }
     }
 }

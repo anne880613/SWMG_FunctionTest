@@ -42,21 +42,40 @@
             buttonChangeDeviceName = new Button();
             checkBoxDO_2 = new CheckBox();
             groupBox1 = new GroupBox();
+            buttonXStop = new Button();
+            numericUpDownRelMove = new NumericUpDown();
+            buttonXRelMove = new Button();
             groupBox2 = new GroupBox();
+            buttonYStop = new Button();
+            numericUpDownYRelMove = new NumericUpDown();
             buttonYJogNegative = new Button();
+            buttonYRelMove = new Button();
             buttonYJogPositive = new Button();
             numericUpDownYAbsTarget = new NumericUpDown();
             buttonYAbsMove = new Button();
             groupBox3 = new GroupBox();
+            buttonZStop = new Button();
+            numericUpDownZRelMove = new NumericUpDown();
+            buttonZRelMove = new Button();
             buttonZJogNegative = new Button();
             buttonZJogPositive = new Button();
             numericUpDownZAbsTarget = new NumericUpDown();
             buttonZAbsMove = new Button();
+            buttonXPosition = new Button();
+            labelXPosition = new Label();
+            button1 = new Button();
+            label1 = new Label();
+            buttonHoming = new Button();
+            labelXHoming = new Label();
+            buttonSetXZero = new Button();
             ((System.ComponentModel.ISupportInitialize)numericUpDownTargetPos).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownRelMove).BeginInit();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownYRelMove).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownYAbsTarget).BeginInit();
             groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownZRelMove).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownZAbsTarget).BeginInit();
             SuspendLayout();
             // 
@@ -151,7 +170,7 @@
             // checkBoxDo1
             // 
             checkBoxDo1.AutoSize = true;
-            checkBoxDo1.Location = new Point(665, 293);
+            checkBoxDo1.Location = new Point(683, 291);
             checkBoxDo1.Name = "checkBoxDo1";
             checkBoxDo1.Size = new Size(57, 19);
             checkBoxDo1.TabIndex = 9;
@@ -162,7 +181,7 @@
             // checkBoxDI_Test
             // 
             checkBoxDI_Test.AutoSize = true;
-            checkBoxDI_Test.Location = new Point(665, 392);
+            checkBoxDI_Test.Location = new Point(683, 390);
             checkBoxDI_Test.Name = "checkBoxDI_Test";
             checkBoxDI_Test.Size = new Size(66, 19);
             checkBoxDI_Test.TabIndex = 10;
@@ -183,7 +202,7 @@
             // checkBoxDO_2
             // 
             checkBoxDO_2.AutoSize = true;
-            checkBoxDO_2.Location = new Point(665, 333);
+            checkBoxDO_2.Location = new Point(683, 331);
             checkBoxDO_2.Name = "checkBoxDO_2";
             checkBoxDO_2.Size = new Size(57, 19);
             checkBoxDO_2.TabIndex = 13;
@@ -193,29 +212,83 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(buttonXStop);
+            groupBox1.Controls.Add(numericUpDownRelMove);
+            groupBox1.Controls.Add(buttonXRelMove);
             groupBox1.Controls.Add(buttonJOGNegative);
             groupBox1.Controls.Add(buttonJOGPositive);
             groupBox1.Controls.Add(numericUpDownTargetPos);
             groupBox1.Controls.Add(buttonAbsMove);
-            groupBox1.Location = new Point(399, 33);
+            groupBox1.Location = new Point(399, 19);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(176, 107);
+            groupBox1.Size = new Size(263, 136);
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "SampleX";
             // 
+            // buttonXStop
+            // 
+            buttonXStop.Location = new Point(182, 32);
+            buttonXStop.Name = "buttonXStop";
+            buttonXStop.Size = new Size(75, 23);
+            buttonXStop.TabIndex = 11;
+            buttonXStop.Text = "STOP";
+            buttonXStop.UseVisualStyleBackColor = true;
+            buttonXStop.Click += buttonXStop_Click;
+            // 
+            // numericUpDownRelMove
+            // 
+            numericUpDownRelMove.Location = new Point(6, 103);
+            numericUpDownRelMove.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            numericUpDownRelMove.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
+            numericUpDownRelMove.Name = "numericUpDownRelMove";
+            numericUpDownRelMove.Size = new Size(75, 23);
+            numericUpDownRelMove.TabIndex = 9;
+            // 
+            // buttonXRelMove
+            // 
+            buttonXRelMove.Location = new Point(87, 103);
+            buttonXRelMove.Name = "buttonXRelMove";
+            buttonXRelMove.Size = new Size(75, 23);
+            buttonXRelMove.TabIndex = 10;
+            buttonXRelMove.Text = "RelMove";
+            buttonXRelMove.UseVisualStyleBackColor = true;
+            buttonXRelMove.Click += buttonXRelMove_Click;
+            // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(buttonYStop);
+            groupBox2.Controls.Add(numericUpDownYRelMove);
             groupBox2.Controls.Add(buttonYJogNegative);
+            groupBox2.Controls.Add(buttonYRelMove);
             groupBox2.Controls.Add(buttonYJogPositive);
             groupBox2.Controls.Add(numericUpDownYAbsTarget);
             groupBox2.Controls.Add(buttonYAbsMove);
-            groupBox2.Location = new Point(399, 161);
+            groupBox2.Location = new Point(399, 155);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(176, 107);
+            groupBox2.Size = new Size(263, 136);
             groupBox2.TabIndex = 15;
             groupBox2.TabStop = false;
             groupBox2.Text = "SampleY";
+            // 
+            // buttonYStop
+            // 
+            buttonYStop.Location = new Point(182, 32);
+            buttonYStop.Name = "buttonYStop";
+            buttonYStop.Size = new Size(75, 23);
+            buttonYStop.TabIndex = 12;
+            buttonYStop.Text = "STOP";
+            buttonYStop.UseVisualStyleBackColor = true;
+            buttonYStop.Click += buttonYStop_Click;
+            // 
+            // numericUpDownYRelMove
+            // 
+            numericUpDownYRelMove.Location = new Point(6, 101);
+            numericUpDownYRelMove.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            numericUpDownYRelMove.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
+            numericUpDownYRelMove.Name = "numericUpDownYRelMove";
+            numericUpDownYRelMove.Size = new Size(75, 23);
+            numericUpDownYRelMove.TabIndex = 11;
             // 
             // buttonYJogNegative
             // 
@@ -227,6 +300,16 @@
             buttonYJogNegative.UseVisualStyleBackColor = true;
             buttonYJogNegative.MouseDown += buttonYJogNegative_MouseDown;
             buttonYJogNegative.MouseUp += buttonYJogNegative_MouseUp;
+            // 
+            // buttonYRelMove
+            // 
+            buttonYRelMove.Location = new Point(87, 101);
+            buttonYRelMove.Name = "buttonYRelMove";
+            buttonYRelMove.Size = new Size(75, 23);
+            buttonYRelMove.TabIndex = 12;
+            buttonYRelMove.Text = "RelMove";
+            buttonYRelMove.UseVisualStyleBackColor = true;
+            buttonYRelMove.Click += buttonYRelMove_Click;
             // 
             // buttonYJogPositive
             // 
@@ -260,16 +343,48 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(buttonZStop);
+            groupBox3.Controls.Add(numericUpDownZRelMove);
+            groupBox3.Controls.Add(buttonZRelMove);
             groupBox3.Controls.Add(buttonZJogNegative);
             groupBox3.Controls.Add(buttonZJogPositive);
             groupBox3.Controls.Add(numericUpDownZAbsTarget);
             groupBox3.Controls.Add(buttonZAbsMove);
-            groupBox3.Location = new Point(399, 284);
+            groupBox3.Location = new Point(399, 291);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(176, 107);
+            groupBox3.Size = new Size(263, 136);
             groupBox3.TabIndex = 16;
             groupBox3.TabStop = false;
             groupBox3.Text = "SampleZ";
+            // 
+            // buttonZStop
+            // 
+            buttonZStop.Location = new Point(182, 32);
+            buttonZStop.Name = "buttonZStop";
+            buttonZStop.Size = new Size(75, 23);
+            buttonZStop.TabIndex = 13;
+            buttonZStop.Text = "STOP";
+            buttonZStop.UseVisualStyleBackColor = true;
+            buttonZStop.Click += buttonZStop_Click;
+            // 
+            // numericUpDownZRelMove
+            // 
+            numericUpDownZRelMove.Location = new Point(6, 100);
+            numericUpDownZRelMove.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            numericUpDownZRelMove.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
+            numericUpDownZRelMove.Name = "numericUpDownZRelMove";
+            numericUpDownZRelMove.Size = new Size(75, 23);
+            numericUpDownZRelMove.TabIndex = 11;
+            // 
+            // buttonZRelMove
+            // 
+            buttonZRelMove.Location = new Point(87, 100);
+            buttonZRelMove.Name = "buttonZRelMove";
+            buttonZRelMove.Size = new Size(75, 23);
+            buttonZRelMove.TabIndex = 12;
+            buttonZRelMove.Text = "RelMove";
+            buttonZRelMove.UseVisualStyleBackColor = true;
+            buttonZRelMove.Click += buttonZRelMove_Click;
             // 
             // buttonZJogNegative
             // 
@@ -312,11 +427,85 @@
             buttonZAbsMove.UseVisualStyleBackColor = true;
             buttonZAbsMove.Click += buttonZAbsMove_Click;
             // 
+            // buttonXPosition
+            // 
+            buttonXPosition.Location = new Point(683, 51);
+            buttonXPosition.Name = "buttonXPosition";
+            buttonXPosition.Size = new Size(95, 23);
+            buttonXPosition.TabIndex = 17;
+            buttonXPosition.Text = "GetXPosition";
+            buttonXPosition.UseVisualStyleBackColor = true;
+            buttonXPosition.Click += buttonXPosition_Click;
+            // 
+            // labelXPosition
+            // 
+            labelXPosition.AutoSize = true;
+            labelXPosition.Location = new Point(683, 77);
+            labelXPosition.Name = "labelXPosition";
+            labelXPosition.Size = new Size(63, 15);
+            labelXPosition.TabIndex = 18;
+            labelXPosition.Text = "X Position";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(209, 285);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 19;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(209, 327);
+            label1.Name = "label1";
+            label1.Size = new Size(42, 15);
+            label1.TabIndex = 20;
+            label1.Text = "label1";
+            // 
+            // buttonHoming
+            // 
+            buttonHoming.Location = new Point(683, 118);
+            buttonHoming.Name = "buttonHoming";
+            buttonHoming.Size = new Size(75, 23);
+            buttonHoming.TabIndex = 21;
+            buttonHoming.Text = "Home";
+            buttonHoming.UseVisualStyleBackColor = true;
+            buttonHoming.Click += buttonHoming_Click;
+            // 
+            // labelXHoming
+            // 
+            labelXHoming.AutoSize = true;
+            labelXHoming.Location = new Point(683, 144);
+            labelXHoming.Name = "labelXHoming";
+            labelXHoming.Size = new Size(64, 15);
+            labelXHoming.TabIndex = 22;
+            labelXHoming.Text = "X Homing";
+            // 
+            // buttonSetXZero
+            // 
+            buttonSetXZero.Location = new Point(683, 182);
+            buttonSetXZero.Name = "buttonSetXZero";
+            buttonSetXZero.Size = new Size(75, 23);
+            buttonSetXZero.TabIndex = 23;
+            buttonSetXZero.Text = "SetXZero";
+            buttonSetXZero.UseVisualStyleBackColor = true;
+            buttonSetXZero.Click += buttonSetXZero_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonSetXZero);
+            Controls.Add(labelXHoming);
+            Controls.Add(buttonHoming);
+            Controls.Add(label1);
+            Controls.Add(button1);
+            Controls.Add(labelXPosition);
+            Controls.Add(buttonXPosition);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -334,9 +523,12 @@
             FormClosing += FormClose;
             ((System.ComponentModel.ISupportInitialize)numericUpDownTargetPos).EndInit();
             groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numericUpDownRelMove).EndInit();
             groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numericUpDownYRelMove).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownYAbsTarget).EndInit();
             groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numericUpDownZRelMove).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownZAbsTarget).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -368,5 +560,21 @@
         private Button buttonZJogPositive;
         private NumericUpDown numericUpDownZAbsTarget;
         private Button buttonZAbsMove;
+        private NumericUpDown numericUpDownRelMove;
+        private Button buttonXRelMove;
+        private NumericUpDown numericUpDownYRelMove;
+        private Button buttonYRelMove;
+        private NumericUpDown numericUpDownZRelMove;
+        private Button buttonZRelMove;
+        private Button buttonXStop;
+        private Button buttonXPosition;
+        private Label labelXPosition;
+        private Button button1;
+        private Label label1;
+        private Button buttonHoming;
+        private Label labelXHoming;
+        private Button buttonYStop;
+        private Button buttonZStop;
+        private Button buttonSetXZero;
     }
 }

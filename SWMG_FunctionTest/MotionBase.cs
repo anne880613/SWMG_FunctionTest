@@ -3,6 +3,7 @@ using SSCApiCLR;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static SWMG_FunctionTest.MotionSWMG;
 
 namespace SWMG_FunctionTest
 {
@@ -12,6 +13,7 @@ namespace SWMG_FunctionTest
         {
             Position,
             Torque,
+            Velocity,
             None,
         }
         public enum TorqueParameter
@@ -27,7 +29,7 @@ namespace SWMG_FunctionTest
         public bool IsReverse { protected set; get; }
         public bool IsValid { protected set; get; }
         public bool SoftLimitEnabled { protected set; get; }
-        public HomeState HomeMode { protected set; get; }
+        public Config.HomeType HomeMode { protected set; get; }
         public bool HomeDirection { protected set; get; }
         public double HomeCreepingSpeed { protected set; get; }
         public double HomeOffsetDistance { protected set; get; }
@@ -50,14 +52,14 @@ namespace SWMG_FunctionTest
         public abstract void EnableDirectionReverse(bool value);
         public abstract void EnableSoftLimit(bool value);
         public abstract double GetPosition();
-        public abstract bool GetSignal(CoreMotionAxisStatus axisStatus);
+        public abstract bool GetSignal(AxisStatus axisStatus);
         public abstract void SetPPU(uint ppu);
         public abstract uint GetPPU();
         public abstract void SetPPUDenominator(uint PPUDenominator);
         public abstract uint GetPPUDenominator();
         public abstract void SetBacklash(double backlash);
         public abstract double GetBacklash();
-        public void SetHomeMode(HomeState mode, double creepingSpeed, double offsetDiatance, bool direction)
+        public void SetHomeMode(Config.HomeType mode, double creepingSpeed, double offsetDiatance, bool direction)
         {
             HomeMode = mode;
             HomeCreepingSpeed = creepingSpeed;
