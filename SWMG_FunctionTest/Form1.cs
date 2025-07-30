@@ -18,8 +18,8 @@ namespace SWMG_FunctionTest
         {
             if (!SWMG.IsOpened)
                 SWMG.OpenDevice();
-            IOManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "IO.ini")));
-            MotionManager.Initial(new IniFile(Path.Combine("C:\\Program Files\\MotionSoftware\\SWM-G\\", "Motor.ini")));
+            IOManager.Initial(new IniFile(Path.Combine("C:\\Automation\\INI\\", "IO.ini")));
+            MotionManager.Initial(new IniFile(Path.Combine("C:\\Automation\\INI\\", "Motor.ini")));
             MotionManager.SetMachineSpeedPercentage(100);
 
             //ÀË¬d¥Ø«eIOª¬ºA
@@ -44,8 +44,9 @@ namespace SWMG_FunctionTest
         {
             if (SWMG.IsOpened)
             {
-                for (int i = 0; i < Enum.GetNames(typeof(Axis)).Length; i++)
-                    MotionManager.ServoOn((Axis)i);
+                //for (int i = 0; i < Enum.GetNames(typeof(Axis)).Length; i++)
+                //    MotionManager.ServoOn((Axis)i);
+                MotionManager.ServoOn(Axis.SampleX);
             }
         }
 
@@ -182,52 +183,52 @@ namespace SWMG_FunctionTest
 
         private void buttonYJogNegative_MouseDown(object sender, MouseEventArgs e)
         {
-            MotionManager.StartJog(Axis.SampleY, false, 100);
+            //MotionManager.StartJog(Axis.SampleY, false, 100);
         }
 
         private void buttonYJogNegative_MouseUp(object sender, MouseEventArgs e)
         {
-            MotionManager.Stop(Axis.SampleY);
+            //MotionManager.Stop(Axis.SampleY);
         }
 
         private void buttonYAbsMove_Click(object sender, EventArgs e)
         {
-            MotionManager.AbsMove(Axis.SampleY, (double)numericUpDownYAbsTarget.Value, 100);
+            //MotionManager.AbsMove(Axis.SampleY, (double)numericUpDownYAbsTarget.Value, 100);
         }
 
         private void buttonYJogPositive_MouseDown(object sender, MouseEventArgs e)
         {
-            MotionManager.StartJog(Axis.SampleY, true, 100);
+            //MotionManager.StartJog(Axis.SampleY, true, 100);
         }
 
         private void buttonYJogPositive_MouseUp(object sender, MouseEventArgs e)
         {
-            MotionManager.Stop(Axis.SampleY);
+            //MotionManager.Stop(Axis.SampleY);
         }
 
         private void buttonZJogNegative_MouseDown(object sender, MouseEventArgs e)
         {
-            MotionManager.StartJog(Axis.SampleZ, false, 100);
+            //MotionManager.StartJog(Axis.SampleZ, false, 100);
         }
 
         private void buttonZJogNegative_MouseUp(object sender, MouseEventArgs e)
         {
-            MotionManager.Stop(Axis.SampleZ);
+            //MotionManager.Stop(Axis.SampleZ);
         }
 
         private void buttonZAbsMove_Click(object sender, EventArgs e)
         {
-            MotionManager.AbsMove(Axis.SampleZ, (double)numericUpDownZAbsTarget.Value, 100);
+            //MotionManager.AbsMove(Axis.SampleZ, (double)numericUpDownZAbsTarget.Value, 100);
         }
 
         private void buttonZJogPositive_MouseDown(object sender, MouseEventArgs e)
         {
-            MotionManager.StartJog(Axis.SampleZ, true, 100);
+            //MotionManager.StartJog(Axis.SampleZ, true, 100);
         }
 
         private void buttonZJogPositive_MouseUp(object sender, MouseEventArgs e)
         {
-            MotionManager.Stop(Axis.SampleZ);
+            //MotionManager.Stop(Axis.SampleZ);
         }
 
         private void buttonXRelMove_Click(object sender, EventArgs e)
@@ -237,12 +238,12 @@ namespace SWMG_FunctionTest
 
         private void buttonYRelMove_Click(object sender, EventArgs e)
         {
-            MotionManager.RelMove(Axis.SampleY, (double)numericUpDownYRelMove.Value, 100);
+            //MotionManager.RelMove(Axis.SampleY, (double)numericUpDownYRelMove.Value, 100);
         }
 
         private void buttonZRelMove_Click(object sender, EventArgs e)
         {
-            MotionManager.RelMove(Axis.SampleZ, (double)numericUpDownZRelMove.Value, 100);
+            //MotionManager.RelMove(Axis.SampleZ, (double)numericUpDownZRelMove.Value, 100);
         }
 
         private void buttonXStop_Click(object sender, EventArgs e)
@@ -274,17 +275,19 @@ namespace SWMG_FunctionTest
 
         private void buttonYStop_Click(object sender, EventArgs e)
         {
-            MotionManager.Stop(Axis.SampleY);
+            //MotionManager.Stop(Axis.SampleY);
         }
 
         private void buttonZStop_Click(object sender, EventArgs e)
         {
-            MotionManager.Stop(Axis.SampleZ);
+            //MotionManager.Stop(Axis.SampleZ);
         }
 
         private void buttonSetXZero_Click(object sender, EventArgs e)
         {
             MotionManager.SetToZero(Axis.SampleX);
         }
+
+        
     }
 }

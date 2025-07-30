@@ -12,6 +12,8 @@ namespace SWMG_FunctionTest
     {
         private static SSCApi _device;//一個device可以有128軸
         private static EngineStatus _egStatus;
+        private static Ecat _EcLib;
+        private static EcMasterInfo _MotorInfo;
         static private IntPtr _DeviceHandle = IntPtr.Zero;
 
 
@@ -39,7 +41,9 @@ namespace SWMG_FunctionTest
                     _device = null;
                 }
                 _device = new SSCApi();
-                //_egStatus = new EngineStatus();//引擎狀態
+                _EcLib = new Ecat(_device);
+                _MotorInfo = new EcMasterInfo();
+                _egStatus = new EngineStatus();//引擎狀態
                 // 建立裝置（可根據實際安裝位置調整路徑）
                 errNum = _device.CreateDevice("C:\\Program Files\\MotionSoftware\\SWM-G\\",
                     DeviceType.DeviceTypeNormal,
@@ -81,8 +85,21 @@ namespace SWMG_FunctionTest
                 //_device_cm = SWMG.GetCoreMotion();
                 //_CmStatus = SWMG.GetCoreMotionStatus();
                 _device_cm.GetStatus(ref _CmStatus);
-                
 
+                // Get MasterInfo.
+                _EcLib.GetMasterInfo(_MotorInfo);
+
+                //-----------------------------------------------------
+                // If the the connection of network is established, 
+                // this master state should be stay in Op state.
+                //-----------------------------------------------------
+                if (_MotorInfo.State != EcStateMachine.Op)
+                {
+                    string strTemp = "MotorInfo State Error[" +
+                                      Enum.GetName(typeof(EcStateMachine), _MotorInfo.State) + "]";
+                    InitialErrorMessage = strTemp + "\r\nError Message:" + SSCApi.ErrorToString(errNum);
+                    return;
+                }
 
                 IsOpened = true;
             }

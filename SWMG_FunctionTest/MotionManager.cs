@@ -24,8 +24,8 @@ namespace SWMG_FunctionTest
         public enum Axis
         {
             SampleX,
-            SampleY, 
-            SampleZ
+            //SampleY, 
+            //SampleZ
         }
 
         private static IniFile? _MotionIni;
@@ -235,51 +235,81 @@ namespace SWMG_FunctionTest
             _Axes[(int)axis].JogMove(direction, speed.MaxSpeed, speed.Acceleration, speed.Deceleration);
         }
 
-        //public static nint DirectAbsMove(int[] axes, double speed, double acc, double dec, double[] target, int speedPercentage = 100)
-        //{
-        //    nint groupHandle = CreatAndCloseNonUseGroup(axes);
-        //    nint[] axesHandle = axes.Select(GetAxisHandle).ToArray();
-        //    Array.Sort(OrderByAxisEnum(axes), target);
-        //    speed *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
-        //    acc *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
-        //    dec *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
-        //    return MotionSWMG.DirectAbsMove(groupHandle, speed, acc, dec, false, target);
-        //}
+        public static void DirectAbsMove(Axis[] axes, double speed, double acc, double dec, double[] target, int speedPercentage = 100)
+        {
+            Array.Sort(OrderByAxisEnum(axes), target);//對軸和目標做一樣的排序
+            //Create a new AxisSelection object to hold the axes
+            AxisSelection axisSelection = new();
+            axisSelection.AxisCount = axes.Count();
+            //axisSelection.Axis[0] = 0;//like this
+            //axisSelection.Axis[1] = 1;
+            //加入軸
+            for (int i = 0; i < axes.Length; i++)
+            {
+                axisSelection.Axis[i] = (int)axes[i];
+            }
 
-        //public static nint LinearAbsMove(int[] axes, double speed, double acc, double dec, double[] target, int speedPercentage = 100)
-        //{
-        //    nint groupHandle = CreatAndCloseNonUseGroup(axes);
-        //    Array.Sort(OrderByAxisEnum(axes), target);
-        //    speed *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
-        //    acc *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
-        //    dec *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
-        //    return MotionSWMG.LinearAbsMove(groupHandle, speed, acc, dec, false, target);
-        //}
+            speed *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
+            acc *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
+            dec *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
+            MotionSWMG.DirectAbsMove(axisSelection, speed, acc, dec, false, target);
+        }
 
-        //private static nint CreatAndCloseNonUseGroup(int[] axes)
-        //{
-        //    //nint[] temp = new nint[_AdvantechGroup.Count];
-        //    //_AdvantechGroup.CopyTo(temp);
-        //    //foreach (var item in temp)
-        //    //{
-        //    //    var state = MotionPCI1203.GetGroupState(item);
-        //    //    if (state == GroupState.STA_Gp_Ready || state == GroupState.STA_Gp_Disable)
-        //    //        MotionPCI1203.CloseGroup(item);
-        //    //    _AdvantechGroup.Remove(item);
-        //    //}
-        //    //_AdvantechGroup.Add(MotionPCI1203.SetGroup(axes.Select(GetAxisHandle).ToArray()));
-        //    //return _AdvantechGroup[^1];
-        //    return 0;
-        //}
+        public static void LinearAbsMove(Axis[] axes, double speed, double acc, double dec, double[] target, int speedPercentage = 100)
+        {//將軸(axes)和軸的目標位置(target)進行線性絕對移動(速度搭配成直線運動)
+            Array.Sort(OrderByAxisEnum(axes), target);//對軸和目標做一樣的排序
+            //Create a new AxisSelection object to hold the axes
+            AxisSelection axisSelection = new();
+            axisSelection.AxisCount = axes.Count();
+            //axisSelection.Axis[0] = 0;//like this
+            //axisSelection.Axis[1] = 1;
+            //加入軸
+            for (int i = 0; i < axes.Length; i++)
+            {
+                axisSelection.Axis[i] = (int)axes[i];
+            }
+
+            speed *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
+            acc *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
+            dec *= MachineSpeedPercentage / 100D * speedPercentage / 100D;
+            MotionSWMG.LinearAbsMove(axisSelection, speed, acc, dec, false, target);
+        }
+
+        private static nint CreatAndCloseNonUseGroup(Axis[] axes)
+        {
+            //Create a new AxisSelection object to hold the axes
+            AxisSelection axisSelection = new();
+            axisSelection.AxisCount = axes.Count();
+            //axisSelection.Axis[0] = 0;//like this
+            //axisSelection.Axis[1] = 1;
+            //加入軸
+            for(int i = 0; i < axes.Length; i++)
+            {
+                axisSelection.Axis[i] = (int)axes[i];
+            }
+
+            //nint[] temp = new nint[_AdvantechGroup.Count];
+            //_AdvantechGroup.CopyTo(temp);
+            //foreach (var item in temp)
+            //{
+            //    var state = MotionPCI1203.GetGroupState(item);
+            //    if (state == GroupState.STA_Gp_Ready || state == GroupState.STA_Gp_Disable)
+            //        MotionPCI1203.CloseGroup(item);
+            //    _AdvantechGroup.Remove(item);
+            //}
+            //_AdvantechGroup.Add(MotionPCI1203.SetGroup(axes.Select(GetAxisHandle).ToArray()));
+            //return _AdvantechGroup[^1];
+            return 0;
+        }
 
 
-        //private static int[] OrderByAxisEnum(int[] axes)
-        //{
-        //    int[] enumOrder = new int[axes.Length];
-        //    for (int i = 0; i < axes.Length; i++)
-        //        enumOrder[i] = (int)axes[i];
-        //    return enumOrder;
-        //}
+        private static int[] OrderByAxisEnum(Axis[] axes)
+        {
+            int[] enumOrder = new int[axes.Length];
+            for (int i = 0; i < axes.Length; i++)
+                enumOrder[i] = (int)axes[i];
+            return enumOrder;
+        }
 
 
         //public static void CloseGroup(nint groupHandle)

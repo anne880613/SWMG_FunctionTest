@@ -67,7 +67,7 @@ namespace SWMG_FunctionTest
             HomeDirection = direction;
         }
 
-        public abstract CoreMotionAxisStatus GetState();
+        public abstract OperationState GetState();
         public abstract void ErrorReset();
         public abstract IntPtr GetAxisHandle();
         public abstract IntPtr GetDeviceHandle();
